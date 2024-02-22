@@ -1,26 +1,20 @@
-import mysql.connector
-from config import DATABASE
+from flask import Flask, render_template, request
+from busqueda import buscar_coincidencias
 
-def buscar_coincidencias(columna, valor):
-    conexion = mysql.connector.connect(**DATABASE)
-    cursor = conexion.cursor()
+app = Flask(__name__)
 
-    consulta = f"SELECT * FROM datospersonalesdb WHERE {columna} LIKE '%{valor}%'"
-    cursor.execute(consulta)
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-    resultados = cursor.fetchall()
+@app.route('/buscar', methods=['POST'])
+def buscar():
+    columna = request.form['columna']
+    valor = request.form['valor']
 
-    if resultados:
-        print("Coincidencias encontradas:")
-        for resultado in resultados:
-            print(resultado)
-    else:
-        print("No se encontraron coincidencias.")
+    resultados = buscar_coincidencias(columna, valor)
 
-    cursor.close()
-    conexion.close()
+    return render_template('index.html', resultados=resultados)
 
-columna = input("Ingrese el nombre de la columna (Clave_cliente, Nombre_Contacto, Correo, Teléfono_Contacto): ")
-valor = input("Ingrese el valor a buscar: ")
-
-buscar_coincidencias(columna, valor)
+if __name__ == '__main__':
+    app.run(debug=True)

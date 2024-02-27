@@ -1,6 +1,6 @@
 para inicializar el entorno virtual de python:
 
-surce venv/bin/activate
+source venv/bin/activate
 
 para inicializar el backend:
 

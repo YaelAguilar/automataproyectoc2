@@ -4,5 +4,5 @@ surce venv/bin/activate
 
 para inicializar el backend:
 
-cd src/
+cd src/;
 python3 main.py
